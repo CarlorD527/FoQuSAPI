@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="tallersocialforoq-firebase-adminsdk-i5x2h-f96267696b.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="tallersocialforoq-firebase-adminsdk-i5x2h-f96267696b.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FQ.Application\FQ.Application.csproj" />
+  </ItemGroup>
+
+</Project>
