@@ -24,6 +24,19 @@ builder.Services.AddScoped<FQ.Application.Validators.Posts.PostValidators>();
 builder.Services.AddScoped<IPostsApplication, PostApplication>();
 builder.Services.AddScoped<ContentModeratorService>();
 
+//Cors
+builder.Services.AddCors(options => {
+
+    options.AddPolicy("Politica", app =>
+    {
+        app.AllowAnyOrigin()
+        .AllowAnyHeader() 
+        .AllowAnyMethod();
+    }
+    );
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,7 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("Politica");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

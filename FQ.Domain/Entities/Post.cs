@@ -6,7 +6,6 @@ namespace FQ.Domain.Entities
     [FirestoreData]
     public class Post : FirebaseDocument
     {
-
         [FirestoreProperty]
         public string? Titulo { get; set; }
 

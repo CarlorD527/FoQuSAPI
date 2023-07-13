@@ -1,13 +1,16 @@
 ﻿using FQ.Application.Dtos.Posts;
 using FQ.Application.Interfaces;
 using FQ.Application.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FQ.Api.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("*")]
     public class PostsController : ControllerBase
     {
         private readonly IPostsApplication _postApplication;
