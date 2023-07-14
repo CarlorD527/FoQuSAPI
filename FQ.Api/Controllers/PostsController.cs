@@ -52,5 +52,14 @@ namespace FQ.Api.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePostById(string id)
+        {
+            var deleteResponse = await _postApplication.deletePost(id);
+
+
+            return Ok(deleteResponse);
+        }
+
     }
 }
