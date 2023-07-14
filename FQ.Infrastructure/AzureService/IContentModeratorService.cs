@@ -10,7 +10,7 @@ namespace FQ.Infrastructure.AzureService
 {
     public interface IContentModeratorService 
     {
-        Task<Dictionary<string, string>> ModerateTextAsync(string text);
+        Task<Screen> ModerateTextAsync(string text);
         Task<Evaluate> ModerateImageAsync(IFormFile imageStream);
     }
 }

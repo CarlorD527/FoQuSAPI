@@ -42,6 +42,33 @@ namespace FQ.Infrastructure.Repositories
             await collRef.AddAsync(entity);
         }
 
+        public async Task<List<T>> GetByIdAsync(string id)
+        {
+            DocumentReference documentRef = firestoreDb.Collection(CollectionName).Document(id);
+            DocumentSnapshot snapshot = await documentRef.GetSnapshotAsync();
 
+            List<T> resultList = new List<T>();
+
+            if (snapshot.Exists)
+            {
+                T document = snapshot.ConvertTo<T>();
+                resultList.Add(document);
+
+                return resultList;
+            }
+            else {
+                return null;
+            }
+           
+        }
+        public async Task<bool> DeleteByIdAsync(string id)
+        {
+            DocumentReference documentRef = firestoreDb.Collection(CollectionName).Document(id);
+            await documentRef.DeleteAsync();
+
+            // Verificar si el documento fue eliminado correctamente
+            DocumentSnapshot snapshot = await documentRef.GetSnapshotAsync();
+            return !snapshot.Exists;
+        }
     }
 }

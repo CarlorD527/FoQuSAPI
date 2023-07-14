@@ -25,5 +25,15 @@ namespace FQ.Infrastructure.Repositories
             await firestoreRepository.PostAsync(entity);
         }
 
+        public async Task<List<Post>> GetByIdAsync(string id) { 
+        
+        
+                return await firestoreRepository.GetByIdAsync(id);
+        }
+
+        public async Task<bool> DeleteByIdAsync(string id)
+        {
+            return await firestoreRepository.DeleteByIdAsync(id);
+        }
     }
 }

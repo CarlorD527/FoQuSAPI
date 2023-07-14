@@ -10,12 +10,14 @@ namespace FQ.Application.Bases
 {
     public class BaseResponse<T>
     {
-        public bool isSucces { get; set; }
+        public bool isSuccess { get; set; }
 
         public T? Data { get; set; }
 
         public string? Message { get; set; }
         public IEnumerable<ValidationFailure>? Errors { get; set; }
         public Evaluate? moderationImageResult {get;set;}
+
+        //public Screen? moderationTextResult { get; set; }
     }
 }

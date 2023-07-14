@@ -12,6 +12,8 @@ namespace FQ.Application.Interfaces
     public interface IPostsApplication
     {
         Task<BaseResponse<List<Post>>> GetAllPosts();
+        Task<BaseResponse<List<Post>>> GetByIdPost(string id);
         Task<BaseResponse<bool>> addPost(AddPostDto postDto);
+        Task<BaseResponse<bool>> deletePost(string id);
     }
 }

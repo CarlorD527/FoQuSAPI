@@ -47,19 +47,38 @@ namespace FQ.Application.Services
 
             if (posts is not null)
             {
-                response.isSucces = true;
+                response.isSuccess = true;
+                response.Data = posts.OrderByDescending(p=>p.fechaCreacion).ToList();
+                response.Message = ReplyMessages.MESSAGE_QUERY;
+            }
+            else
+            {
+
+                response.isSuccess = false;
+                response.Message = ReplyMessages.MESSAGE_QUERY_EMPTY;
+            }
+            return response;
+        }
+        public async Task<BaseResponse<List<Post>>> GetByIdPost(string id)
+        {
+            var response = new BaseResponse<List<Post>>();
+
+            var posts = await postRepository.GetByIdAsync(id);
+
+            if (posts is not null)
+            {
+                response.isSuccess = true;
                 response.Data = posts;
                 response.Message = ReplyMessages.MESSAGE_QUERY;
             }
             else
             {
 
-                response.isSucces = false;
+                response.isSuccess = false;
                 response.Message = ReplyMessages.MESSAGE_QUERY_EMPTY;
             }
             return response;
         }
-
 
         public async Task<BaseResponse<bool>> addPost([FromForm] AddPostDto postDto)
         {
@@ -68,8 +87,8 @@ namespace FQ.Application.Services
             //Llamar metodo para realizar las validaciones basicas
             var validationResult = await _validatorRules.ValidateAsync(postDto);
 
-            //<------ POR IMPLEMENTAR ----->
-            //var moderationResult =  _contentModeratorService.ModerateTextAsync(postDto.Contenido!);
+            ////<------ POR IMPLEMENTAR ----->
+            //var moderationTextResult =  _contentModeratorService.ModerateTextAsync(postDto.Contenido!);
 
             FireStoreUTILS fireStoreUTILS = new FireStoreUTILS();
 
@@ -83,11 +102,13 @@ namespace FQ.Application.Services
             //Adjuntar el resultando en el response
             response.moderationImageResult = moderationImageResult.Result;
 
+            //response.moderationTextResult = moderationTextResult.Result;
             //Validaciones basicas  y validacion del resultado del evaluador cognitivo
             if (!validationResult.IsValid || moderationImageResult.Result.IsImageAdultClassified == true || moderationImageResult.Result.IsImageRacyClassified == true)
             {
-
-                response.isSucces = false;
+           
+                await fireStoreUTILS.DeleteImage(postDto.Imagen!.FileName);
+                response.isSuccess = false;
                 response.Message = ReplyMessages.MESSAGE_FAILED;
                 response.Errors = validationResult.Errors;
             }
@@ -114,12 +135,12 @@ namespace FQ.Application.Services
                 //Adjuntar mensajes de respuesta al response (error, succeso, objeto guardado)
                 if (isPostAdded)
                 {
-                    response.isSucces = true;
+                    response.isSuccess = true;
                     response.Message = ReplyMessages.MESSAGE_SAVE;
                 }
                 else
                 {
-                    response.isSucces = false;
+                    response.isSuccess = false;
                     response.Message = ReplyMessages.MESSAGE_FAILED;
                 }
             }
@@ -127,5 +148,37 @@ namespace FQ.Application.Services
             return response;
         }
 
+        public async Task<BaseResponse<bool>> deletePost(string id)
+        {
+            var response = new BaseResponse<bool>();
+
+ 
+            //trayendo la lista de post (tiene un solo post)
+            var Listapost = await postRepository.GetByIdAsync(id);
+
+            var post = Listapost.FirstOrDefault(p=>p.Id == id);
+
+
+            FireStoreUTILS fireStoreUTILS = new FireStoreUTILS();
+
+            await fireStoreUTILS.DeleteImageByUrl(post?.UrlImagen!);
+
+
+            bool isDeleted = await postRepository.DeleteByIdAsync(id);
+
+            if (isDeleted)
+            {
+                response.isSuccess = true;
+                response.Data = isDeleted;
+                response.Message = "Post eliminado correctamente!";
+            }
+            else
+            {
+                response.isSuccess = false;
+                response.Message = "Error al eliminar un post.";
+            }
+
+            return response;
+        }
     }
 }

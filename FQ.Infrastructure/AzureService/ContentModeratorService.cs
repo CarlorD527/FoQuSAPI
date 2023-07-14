@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.Azure.CognitiveServices.ContentModerator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static Google.Rpc.Context.AttributeContext.Types;
-using static System.Net.Mime.MediaTypeNames;
+using System.IO;
 
 namespace FQ.Infrastructure.AzureService
 {
@@ -42,36 +37,19 @@ namespace FQ.Infrastructure.AzureService
             }
         }
 
-
-
-        public Task<Dictionary<string, string>> ModerateTextAsync(string text)
+        public Task<Screen> ModerateTextAsync(string text)
         {
             throw new NotImplementedException();
         }
 
-        // INTENTO DE IMPLEMENTACION 
-        //public async Task<Dictionary<string,string>> ModerateTextAsync (string text)
+        //// INTENTO DE IMPLEMENTACION 
+        //public async Task<Screen> ModerateTextAsync(string text)
         //{
-        //    var result = await _client.TextModeration.ScreenTextAsync("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(text)));
-
-        //    if (result != null && result.Classification != null && result.OriginalText != null) {
-
-        //        var moderationResult = new Dictionary<string, string>
-        //        {
-        //             { "Resultado", result.Classification.ReviewRecommended!.Value.ToString() },
-        //             { "TextoOriginal", result.OriginalText.ToString() },
-        //        };
-
-        //        return  moderationResult;
-        //    }
-
-        //      else
+        //    using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(text)))
         //    {
-        //        var dic = new Dictionary<string, string>
-        //        {
-        //            { "resultado", "no se clasifico o no se encontro nada!?" }
-        //        };
-        //        return dic;
+        //        var result = await _client.TextModeration.ScreenTextAsync("text/plain", stream,"spa",false,false,null,true,default);
+
+        //        return result;
 
         //    }
         //}

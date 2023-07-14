@@ -19,10 +19,12 @@ namespace FQ.Infrastructure.FirestoreServices
 
         private static readonly string AuthPassword = "x1x2x3x4x5x6";
 
-        public FireStoreUTILS() {
+        public FireStoreUTILS()
+        {
         }
 
-        public async Task<string> UploadImage (IFormFile formfile, string fileName) {
+        public async Task<string> UploadImage(IFormFile formfile, string fileName)
+        {
 
             using (var ms = new MemoryStream())
             {
@@ -53,7 +55,48 @@ namespace FQ.Infrastructure.FirestoreServices
 
             }
 
-        
+
+        }
+        public async Task DeleteImage(string nombreArchivo)
+        {
+            var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
+
+            var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
+
+            var cancellation = new CancellationTokenSource();
+
+            var storage = new FirebaseStorage(
+                BucketName,
+                new FirebaseStorageOptions
+                {
+                    AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
+                    ThrowOnCancel = true
+                });
+
+            await storage.Child("Fotos_Publicaciones").Child(nombreArchivo).DeleteAsync();
+        }
+
+        public async Task DeleteImageByUrl(string url) {
+
+            var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
+
+            var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
+
+            var cancellation = new CancellationTokenSource();
+
+            Uri uri = new Uri(url);
+            string nombreArchivo = Path.GetFileName(uri.LocalPath);
+
+            var storage = new FirebaseStorage(
+                BucketName,
+                new FirebaseStorageOptions
+                {
+                    AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
+                    ThrowOnCancel = true
+                });
+
+            await storage.Child("Fotos_Publicaciones").Child(nombreArchivo).DeleteAsync();
+
         }
     }
 }

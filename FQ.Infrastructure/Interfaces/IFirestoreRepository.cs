@@ -11,5 +11,7 @@ namespace FQ.Infrastructure.Interfaces
 
         Task<List<T>> GetAllAsync();
         Task PostAsync(T entity);
+
+        Task<bool> DeleteByIdAsync(string id);
     }
 }
