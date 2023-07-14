@@ -25,17 +25,10 @@ builder.Services.AddScoped<IPostsApplication, PostApplication>();
 builder.Services.AddScoped<ContentModeratorService>();
 
 //Cors
-builder.Services.AddCors(options => {
-
-    options.AddPolicy("Politica", app =>
-    {
-        app.AllowAnyOrigin()
-        .AllowAnyHeader() 
-        .AllowAnyMethod();
-    }
-    );
-});
-
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -44,8 +37,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("corsapp");
 }
-app.UseCors("Politica");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

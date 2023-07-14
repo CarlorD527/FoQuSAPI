@@ -10,7 +10,6 @@ namespace FQ.Api.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("*")]
     public class PostsController : ControllerBase
     {
         private readonly IPostsApplication _postApplication;
@@ -30,6 +29,20 @@ namespace FQ.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetPostById(string id)
+        {
+            var post = await _postApplication.GetByIdPost(id);
+
+            if (post != null)
+            {
+                return Ok(post);
+            }
+
+            return NotFound();
+        }
+
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterPost([FromForm] AddPostDto requestDto)
 
